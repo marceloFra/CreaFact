@@ -1,6 +1,6 @@
 import { Feather } from "@expo/vector-icons";
 import { useMemo, useState } from "react";
-import { KeyboardAvoidingView, Platform, Text, TouchableOpacity, View } from "react-native";
+import { KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import Button from "../../components/ui/Button";
 import Field from "../../components/ui/Field";
 import { useAuth } from "../../hooks/useAuth";
@@ -35,8 +35,10 @@ export default function Login() {
 
   return (
     <KeyboardAvoidingView style={{ flex: 1, backgroundColor: "#E6F2F0" }}
-                          behavior={Platform.OS === "ios" ? "padding" : undefined}>
-      <View style={{ flex: 1, paddingHorizontal: 24, justifyContent: "center" }}>
+                          behavior={Platform.OS === "ios" ? "padding" : "height"}>
+      <ScrollView style={{ flex: 1 }}
+                  contentContainerStyle={{ flexGrow: 1, paddingHorizontal: 24, justifyContent: "center" }}
+                  keyboardShouldPersistTaps="handled">
         {/* Encabezado */}
         <View style={{ alignItems: "center", marginBottom: 24 }}>
           <View style={{
@@ -71,7 +73,7 @@ export default function Login() {
           {error && <Text style={{ color: "#b91c1c", marginBottom: 8 }}>{error}</Text>}
           <Button title="INICIAR SESIÓN" onPress={onSubmit} disabled={!canSubmit} loading={loading} />
         </View>
-      </View>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 }
