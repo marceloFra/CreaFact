@@ -1,9 +1,9 @@
-import { useState, useMemo } from "react";
-import { View, Text, TouchableOpacity, KeyboardAvoidingView, Platform } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { useAuth } from "../../hooks/useAuth";
-import Field from "../../components/ui/Field";
+import { useMemo, useState } from "react";
+import { KeyboardAvoidingView, Platform, Text, TouchableOpacity, View } from "react-native";
 import Button from "../../components/ui/Button";
+import Field from "../../components/ui/Field";
+import { useAuth } from "../../hooks/useAuth";
 
 export default function Login() {
   const { login } = useAuth();
@@ -58,10 +58,10 @@ export default function Login() {
         }}>
           <Field label="URL" icon="link-2" value={url}
             onChangeText={setUrl} keyboardType="url"
-            placeholder="chaclaceviche.pos.createcsolutions.com" autoCapitalize="none" />
+            placeholder="demo.pos.createcsolutions.com" autoCapitalize="none" />
           <Field label="Correo electrónico" icon="user" value={email}
             onChangeText={setEmail} keyboardType="email-address"
-            placeholder="empresa1@gmail.com" autoCapitalize="none" />
+            placeholder="demo@createc.com" autoCapitalize="none" />
           <Field label="Contraseña" icon="lock" value={password}
             onChangeText={setPassword} placeholder="••••••••••" secureTextEntry={secure} />
           <TouchableOpacity onPress={() => setSecure(s => !s)} style={{ alignSelf: "flex-end", marginTop: -8, marginBottom: 8 }}>
