@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import * as SecureStore from "expo-secure-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { loginService, logoutService } from "../services/auth";
+import { getToken, setToken, deleteToken } from "../lib/tokenStorage";
 
 type Session = { token: string; email: string; baseURL: string };
 type Ctx = {
@@ -18,7 +18,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     (async () => {
-      const token = await SecureStore.getItemAsync("token");
+      const token = await getToken();
       const baseURL = (await AsyncStorage.getItem("baseURL")) || "";
       const email = (await AsyncStorage.getItem("userEmail")) || "";
       if (token && baseURL) setSession({ token, baseURL, email });
@@ -32,7 +32,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       loading,
       login: async (baseURL: string, email: string, password: string) => {
         const s = await loginService(baseURL, email, password);
-        await SecureStore.setItemAsync("token", s.token);
+        await setToken(s.token);
         await AsyncStorage.multiSet([
           ["baseURL", s.baseURL],
           ["userEmail", s.email],
@@ -41,7 +41,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       },
       logout: async () => {
         await logoutService();
-        await SecureStore.deleteItemAsync("token");
+        await deleteToken();
         await AsyncStorage.multiRemove(["baseURL", "userEmail"]);
         setSession(null);
       },

@@ -1,5 +1,5 @@
-import * as SecureStore from "expo-secure-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getToken } from "../lib/tokenStorage";
 
 export const normalizeBaseURL = (u: string) => {
   if (!/^https?:\/\//i.test(u)) u = `https://${u.trim()}`;
@@ -7,7 +7,7 @@ export const normalizeBaseURL = (u: string) => {
 };
 
 export async function apiFetch(path: string, init: RequestInit = {}) {
-  const token = await SecureStore.getItemAsync("token");
+  const token = await getToken();
   const baseURL = (await AsyncStorage.getItem("baseURL")) || "";
   const headers = { ...(init.headers || {}), "Content-Type": "application/json" };
   if (token) (headers as any).Authorization = `Bearer ${token}`;
