@@ -2,7 +2,7 @@ import { normalizeBaseURL } from "./api";
 
 export async function loginService(baseURL: string, email: string, password: string) {
   const url = normalizeBaseURL(baseURL);
-  const resp = await fetch(`${url}/api/auth/login`, {
+  const resp = await fetch(`${url}/api/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),
