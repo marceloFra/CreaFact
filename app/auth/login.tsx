@@ -28,7 +28,7 @@ export default function Login() {
     try {
       setLoading(true);
       await login(url, email, password);
-      router.replace("/");
+      router.replace("/(tabs)");
     } catch (e: any) {
       setError(e.message || "Error al iniciar sesión");
     } finally {
