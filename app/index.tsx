@@ -6,5 +6,5 @@ export default function Index() {
   if (loading) return null; // usa el splash
 
   // ✅ grupos () NO van en la URL
-  return <Redirect href={session ? "/" : "/auth/login"} />;
+  return <Redirect href={session ? "/(tabs)" : "/auth/login"} />;
 }
