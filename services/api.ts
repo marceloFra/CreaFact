@@ -1,5 +1,5 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getToken } from "../lib/tokenStorage";
+import { getSession } from "../lib/sessionStorage";
 
 export const normalizeBaseURL = (u: string) => {
   if (!/^https?:\/\//i.test(u)) u = `https://${u.trim()}`;
@@ -8,7 +8,8 @@ export const normalizeBaseURL = (u: string) => {
 
 export async function apiFetch(path: string, init: RequestInit = {}) {
   const token = await getToken();
-  const baseURL = (await AsyncStorage.getItem("baseURL")) || "";
+  const session = await getSession();
+  const baseURL = session?.baseURL || "";
   const headers = { ...(init.headers || {}), "Content-Type": "application/json" };
   if (token) (headers as any).Authorization = `Bearer ${token}`;
   const resp = await fetch(`${normalizeBaseURL(baseURL)}${path}`, { ...init, headers });

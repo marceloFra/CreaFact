@@ -1,9 +1,10 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { loginService, logoutService } from "../services/auth";
-import { getToken, setToken, deleteToken } from "../lib/tokenStorage";
+import { setToken, deleteToken } from "../lib/tokenStorage";
+import { getSession, setSession as persistSession, deleteSession } from "../lib/sessionStorage";
+ 
 
-type Session = { token: string; email: string; baseURL: string };
+type Session = { token: string; email: string; baseURL: string; [key: string]: any };
 type Ctx = {
   session: Session | null;
   loading: boolean;
@@ -18,10 +19,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     (async () => {
-      const token = await getToken();
-      const baseURL = (await AsyncStorage.getItem("baseURL")) || "";
-      const email = (await AsyncStorage.getItem("userEmail")) || "";
-      if (token && baseURL) setSession({ token, baseURL, email });
+      const stored = await getSession<Session>();
+      if (stored) setSession(stored);
       setLoading(false);
     })();
   }, []);
@@ -33,16 +32,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       login: async (baseURL: string, email: string, password: string) => {
         const s = await loginService(baseURL, email, password);
         await setToken(s.token);
-        await AsyncStorage.multiSet([
-          ["baseURL", s.baseURL],
-          ["userEmail", s.email],
-        ]);
+        await persistSession(s);
         setSession(s);
       },
       logout: async () => {
         await logoutService();
         await deleteToken();
-        await AsyncStorage.multiRemove(["baseURL", "userEmail"]);
+        await deleteSession();
         setSession(null);
       },
     }),
