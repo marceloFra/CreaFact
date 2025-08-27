@@ -12,8 +12,8 @@ export async function loginService(baseURL: string, email: string, password: str
     try { const j = await resp.json(); msg = j?.message || j?.error || msg; } catch {}
     throw new Error(msg);
   }
-  const data = await resp.json(); // { token, user? }
-  return { token: data.token, email, baseURL: url };
+  const data = await resp.json(); // contiene token y demás datos del usuario
+  return { ...data, email, baseURL: url };
 }
 
 export async function logoutService() {

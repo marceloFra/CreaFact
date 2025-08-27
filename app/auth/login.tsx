@@ -1,12 +1,14 @@
 import { Feather } from "@expo/vector-icons";
 import { useMemo, useState } from "react";
 import { KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { useRouter } from "expo-router";
 import Button from "../../components/ui/Button";
 import Field from "../../components/ui/Field";
 import { useAuth } from "../../hooks/useAuth";
 
 export default function Login() {
   const { login } = useAuth();
+  const router = useRouter();
   const [url, setUrl] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,6 +28,7 @@ export default function Login() {
     try {
       setLoading(true);
       await login(url, email, password);
+      router.replace("/");
     } catch (e: any) {
       setError(e.message || "Error al iniciar sesión");
     } finally {
