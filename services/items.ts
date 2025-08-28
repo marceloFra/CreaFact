@@ -10,12 +10,12 @@ export interface Item {
 
 export async function fetchItems(): Promise<Item[]> {
   const data = await apiFetch('/api/sellnow/items');
-  const arr = data?.data?.items ?? [];
+  const arr = data.items ?? [];
   return arr.map((i: any) => ({
     id: i.id,
-    description: i.descripcion,
-    price: i.precio,
+    description: i.description,
+    price: i.price,
     stock: i.stock,
-    image_url: i.imageUrl,
+    image_url: i.image_url,
   }));
 }
