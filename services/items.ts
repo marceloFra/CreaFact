@@ -9,8 +9,13 @@ export interface Item {
 }
 
 export async function fetchItems(): Promise<Item[]> {
-  const data = await apiFetch('/api/sellnow/items');
-  const arr = data.items ?? [];
+  const response = await apiFetch('/api/sellnow/items');
+
+  console.log('Respuesta de /api/sellnow/items:', response);
+
+  // Ojo: los items vienen en response.data, no en response.items
+  const arr = response.data ?? [];
+
   return arr.map((i: any) => ({
     id: i.id,
     description: i.description,
