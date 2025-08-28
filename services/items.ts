@@ -9,7 +9,7 @@ export interface Item {
 }
 
 export async function fetchItems(): Promise<Item[]> {
-  const data = await apiFetch('/items');
+  const data = await apiFetch('/api/sellnow/items');
   const arr = Array.isArray(data) ? data : (data.items || []);
   return arr.map((i: any) => ({
     id: i.id,
