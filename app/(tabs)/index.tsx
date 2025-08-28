@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, Image, TextInput, View } from 'react-native';
+import { ActivityIndicator, FlatList, Image, TextInput, View, TouchableOpacity } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { fetchItems, Item } from '@/services/items';
 import { useAuth } from '@/hooks/useAuth';
-import Button from '@/components/ui/Button';
+import { IconSymbol } from '@/components/ui/IconSymbol';
 
 export default function HomeScreen() {
   const { session, loading: authLoading } = useAuth();
@@ -58,23 +58,39 @@ export default function HomeScreen() {
           keyExtractor={(item) => item.id.toString()}
           ListHeaderComponent={
             <View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
-              <ThemedText type="title" style={{ marginBottom: 12 }}>PRODUCTOS</ThemedText>
-              <TextInput
-                placeholder="Buscar"
-                value={search}
-                onChangeText={setSearch}
-                style={{
-                  borderWidth: 1,
-                  borderColor: '#E2E8F0',
-                  borderRadius: 12,
-                  paddingHorizontal: 12,
-                  paddingVertical: 8,
-                  marginBottom: 12,
-                }}
-              />
-              <View style={{ flexDirection: 'row', gap: 12 }}>
-                <Button title="BUSCAR" onPress={() => { }} />
-                <Button title="ACCION" onPress={() => { }} />
+              <ThemedText type="subtitle" style={{ marginBottom: 12, textAlign: 'center' }}>PRODUCTOS</ThemedText>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                <TextInput
+                  placeholder="Buscar"
+                  value={search}
+                  onChangeText={setSearch}
+                  style={{
+                    flex: 1,
+                    borderWidth: 1,
+                    borderColor: '#E2E8F0',
+                    borderRadius: 12,
+                    paddingHorizontal: 12,
+                    paddingVertical: 8,
+                  }}
+                />
+                <TouchableOpacity
+                  style={{ backgroundColor: '#0F766E', padding: 8, borderRadius: 12 }}
+                  onPress={() => { }}
+                >
+                  <IconSymbol name="camera.fill" size={24} color="#fff" />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{ backgroundColor: '#0F766E', padding: 8, borderRadius: 12 }}
+                  onPress={() => { }}
+                >
+                  <IconSymbol name="plus" size={24} color="#fff" />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{ backgroundColor: '#0F766E', padding: 8, borderRadius: 12 }}
+                  onPress={() => { }}
+                >
+                  <IconSymbol name="line.3.horizontal" size={24} color="#fff" />
+                </TouchableOpacity>
               </View>
             </View>
           }
