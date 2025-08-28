@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, Image, TextInput, View } from 'react-native';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -13,6 +14,7 @@ export default function HomeScreen() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState('');
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     const load = async () => {
@@ -49,43 +51,45 @@ export default function HomeScreen() {
   }
 
   return (
-    <ThemedView style={{ flex: 1 }}>
-      <FlatList<Item>
-        data={filtered}
-        keyExtractor={(item) => item.id.toString()}
-        ListHeaderComponent={
-          <View style={{ padding: 16 }}>
-            <ThemedText type="title" style={{ marginBottom: 12 }}>PRODUCTOS</ThemedText>
-            <TextInput
-              placeholder="Buscar"
-              value={search}
-              onChangeText={setSearch}
-              style={{
-                borderWidth: 1,
-                borderColor: '#E2E8F0',
-                borderRadius: 12,
-                paddingHorizontal: 12,
-                paddingVertical: 8,
-                marginBottom: 12,
-              }}
-            />
-            <View style={{ flexDirection: 'row', gap: 12 }}>
-              <Button title="BUSCAR" onPress={() => { }} />
-              <Button title="ACCION" onPress={() => { }} />
+    <SafeAreaView style={{ flex: 1, paddingTop: insets.top }}>
+      <ThemedView style={{ flex: 1 }}>
+        <FlatList<Item>
+          data={filtered}
+          keyExtractor={(item) => item.id.toString()}
+          ListHeaderComponent={
+            <View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
+              <ThemedText type="title" style={{ marginBottom: 12 }}>PRODUCTOS</ThemedText>
+              <TextInput
+                placeholder="Buscar"
+                value={search}
+                onChangeText={setSearch}
+                style={{
+                  borderWidth: 1,
+                  borderColor: '#E2E8F0',
+                  borderRadius: 12,
+                  paddingHorizontal: 12,
+                  paddingVertical: 8,
+                  marginBottom: 12,
+                }}
+              />
+              <View style={{ flexDirection: 'row', gap: 12 }}>
+                <Button title="BUSCAR" onPress={() => { }} />
+                <Button title="ACCION" onPress={() => { }} />
+              </View>
             </View>
-          </View>
-        }
-        renderItem={({ item }) => (
-          <View style={{ flexDirection: 'row', padding: 16 }}>
-            <Image source={{ uri: item.image_url }} style={{ width: 64, height: 64, marginRight: 16 }} />
-            <View>
-              <ThemedText type="subtitle">{item.description}</ThemedText>
-              <ThemedText>Precio: S/ {item.price}</ThemedText>
-              <ThemedText>Stock: {item.stock}</ThemedText>
+          }
+          renderItem={({ item }) => (
+            <View style={{ flexDirection: 'row', padding: 16 }}>
+              <Image source={{ uri: item.image_url }} style={{ width: 64, height: 64, marginRight: 16 }} />
+              <View>
+                <ThemedText type="subtitle">{item.description}</ThemedText>
+                <ThemedText>Precio: S/ {item.price}</ThemedText>
+                <ThemedText>Stock: {item.stock}</ThemedText>
+              </View>
             </View>
-          </View>
-        )}
-      />
-    </ThemedView>
+          )}
+        />
+      </ThemedView>
+    </SafeAreaView>
   );
 }
