@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, Image, TextInput, View, TouchableOpacity } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
 
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -15,6 +16,7 @@ export default function HomeScreen() {
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const insets = useSafeAreaInsets();
+  const router = useRouter();
 
   useEffect(() => {
     const load = async () => {
@@ -81,7 +83,7 @@ export default function HomeScreen() {
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={{ backgroundColor: '#0F766E', padding: 8, borderRadius: 12 }}
-                  onPress={() => { }}
+                  onPress={() => router.push('/product/new')}
                 >
                   <IconSymbol name="plus" size={24} color="#fff" />
                 </TouchableOpacity>
