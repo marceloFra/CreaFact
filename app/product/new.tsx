@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ScrollView, View, TextInput, Switch, TouchableOpacity } from 'react-native';
+import { ScrollView, View, TextInput, Switch, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useRouter } from 'expo-router';
@@ -17,11 +17,21 @@ export default function NewProduct() {
   const [price, setPrice] = useState('');
   const [includesIgv, setIncludesIgv] = useState(false);
   const [category, setCategory] = useState('');
+  const [affectation, setAffectation] = useState('');
+  const [purchasePrice, setPurchasePrice] = useState('');
   const [stock, setStock] = useState('');
   const [minStock, setMinStock] = useState('');
+  const [image, setImage] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showCategories, setShowCategories] = useState(false);
+  const [showAffectations, setShowAffectations] = useState(false);
   const categories = ['General', 'Electrónica', 'Alimentos'];
+  const affectations = [
+    'Gravado - Operación Onerosa',
+    'Exonerado - Operación Onerosa',
+    'Inafecto - Operación Onerosa',
+  ];
+
 
   const inputStyle = {
     borderWidth: 1,
@@ -113,21 +123,73 @@ export default function NewProduct() {
                 ))}
               </View>
             )}
-            {errors.category && <ThemedText style={{ color: 'red' }}>{errors.category}</ThemedText>}
-          </View>
-          <View>
-            <ThemedText>Stock</ThemedText>
-            <TextInput value={stock} onChangeText={setStock} keyboardType="numeric" style={inputStyle} />
-          </View>
-          <View>
-            <ThemedText>Stock mínimo</ThemedText>
-            <TextInput value={minStock} onChangeText={setMinStock} keyboardType="numeric" style={inputStyle} />
-          </View>
+          {errors.category && <ThemedText style={{ color: 'red' }}>{errors.category}</ThemedText>}
+        </View>
+        <View>
+          <ThemedText>Afectación</ThemedText>
           <TouchableOpacity
-            onPress={handleSave}
-            style={{ backgroundColor: '#0F766E', padding: 12, borderRadius: 12, alignItems: 'center', marginTop: 8 }}
+            onPress={() => setShowAffectations(!showAffectations)}
+            style={[inputStyle, { justifyContent: 'center' }]}
           >
-            <ThemedText style={{ color: '#fff' }}>Guardar</ThemedText>
+            <ThemedText>{affectation || 'Seleccione'}</ThemedText>
+          </TouchableOpacity>
+          {showAffectations && (
+            <View style={{ borderWidth: 1, borderColor: '#E2E8F0', borderRadius: 12, marginTop: 4 }}>
+              {affectations.map((af) => (
+                <TouchableOpacity
+                  key={af}
+                  onPress={() => {
+                    setAffectation(af);
+                    setShowAffectations(false);
+                  }}
+                  style={{ padding: 8 }}
+                >
+                  <ThemedText>{af}</ThemedText>
+                </TouchableOpacity>
+              ))}
+            </View>
+          )}
+        </View>
+        <View>
+          <ThemedText>Precio unitario de compra</ThemedText>
+          <TextInput
+            value={purchasePrice}
+            onChangeText={setPurchasePrice}
+            keyboardType="numeric"
+            style={inputStyle}
+          />
+        </View>
+        <View>
+          <ThemedText>Stock</ThemedText>
+          <TextInput value={stock} onChangeText={setStock} keyboardType="numeric" style={inputStyle} />
+        </View>
+        <View>
+          <ThemedText>Stock mínimo</ThemedText>
+          <TextInput value={minStock} onChangeText={setMinStock} keyboardType="numeric" style={inputStyle} />
+        </View>
+        <View>
+          <ThemedText>Cargar imagen</ThemedText>
+          <TouchableOpacity
+            onPress={() => {
+              setImage('imagen.png');
+              Alert.alert('Seleccionar imagen no implementado');
+            }}
+            style={[
+              inputStyle,
+              { justifyContent: 'center', alignItems: 'center', paddingVertical: 12, borderStyle: 'dashed' },
+            ]}
+          >
+            <ThemedText style={{ color: '#0F766E' }}>
+              {image ? image : 'Seleccionar archivo'}
+            </ThemedText>
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity
+          onPress={handleSave}
+          style={{ backgroundColor: '#0F766E', padding: 12, borderRadius: 12, alignItems: 'center', marginTop: 8 }}
+        >
+          <ThemedText style={{ color: '#fff' }}>Guardar</ThemedText>
+
           </TouchableOpacity>
         </ScrollView>
       </ThemedView>
