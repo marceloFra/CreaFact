@@ -32,6 +32,7 @@ export default function NewProduct() {
     'Inafecto - Operación Onerosa',
   ];
 
+
   const inputStyle = {
     borderWidth: 1,
     borderColor: '#E2E8F0',
@@ -188,6 +189,7 @@ export default function NewProduct() {
           style={{ backgroundColor: '#0F766E', padding: 12, borderRadius: 12, alignItems: 'center', marginTop: 8 }}
         >
           <ThemedText style={{ color: '#fff' }}>Guardar</ThemedText>
+
           </TouchableOpacity>
         </ScrollView>
       </ThemedView>
