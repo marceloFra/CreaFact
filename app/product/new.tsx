@@ -29,8 +29,23 @@ export default function NewProduct() {
   const categories = ['General', 'Electrónica', 'Alimentos'];
   const affectations = [
     { code: '10', label: 'Gravado – Operación Onerosa' },
+    { code: '11', label: 'Gravado – Retiro por premio' },
+    { code: '12', label: 'Gravado – Retiro por donación' },
+    { code: '13', label: 'Gravado – Retiro' },
+    { code: '14', label: 'Gravado – Retiro por publicidad' },
+    { code: '15', label: 'Gravado – Bonificaciones' },
+    { code: '16', label: 'Gravado – Retiro por entrega a trabajadores' },
+    { code: '17', label: 'Gravado – IVAP' },
     { code: '20', label: 'Exonerado – Operación Onerosa' },
+    { code: '21', label: 'Exonerado – Transferencia Gratuita' },
     { code: '30', label: 'Inafecto – Operación Onerosa' },
+    { code: '31', label: 'Inafecto – Retiro por Bonificación' },
+    { code: '32', label: 'Inafecto – Retiro' },
+    { code: '33', label: 'Inafecto – Retiro por Muestras Médicas' },
+    { code: '34', label: 'Inafecto – Retiro por Convenio Colectivo' },
+    { code: '35', label: 'Inafecto – Retiro por premio' },
+    { code: '36', label: 'Inafecto – Retiro por publicidad' },
+    { code: '37', label: 'Inafecto – Transferencia gratuita' },
     { code: '40', label: 'Exportación de bienes o servicios' },
   ];
 
