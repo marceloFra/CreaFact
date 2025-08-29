@@ -7,6 +7,7 @@ import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { IconSymbol } from '@/components/ui/IconSymbol';
+import { apiFetch } from '@/services/api';
 
 export default function NewProduct() {
   const router = useRouter();
@@ -17,7 +18,7 @@ export default function NewProduct() {
   const [price, setPrice] = useState('');
   const [includesIgv, setIncludesIgv] = useState(false);
   const [category, setCategory] = useState('');
-  const [affectation, setAffectation] = useState('');
+  const [affectation, setAffectation] = useState<string>('');
   const [purchasePrice, setPurchasePrice] = useState('');
   const [stock, setStock] = useState('');
   const [minStock, setMinStock] = useState('');
@@ -27,9 +28,25 @@ export default function NewProduct() {
   const [showAffectations, setShowAffectations] = useState(false);
   const categories = ['General', 'Electrónica', 'Alimentos'];
   const affectations = [
-    'Gravado - Operación Onerosa',
-    'Exonerado - Operación Onerosa',
-    'Inafecto - Operación Onerosa',
+    { code: '10', label: 'Gravado – Operación Onerosa' },
+    { code: '11', label: 'Gravado – Retiro por premio' },
+    { code: '12', label: 'Gravado – Retiro por donación' },
+    { code: '13', label: 'Gravado – Retiro' },
+    { code: '14', label: 'Gravado – Retiro por publicidad' },
+    { code: '15', label: 'Gravado – Bonificaciones' },
+    { code: '16', label: 'Gravado – Retiro por entrega a trabajadores' },
+    { code: '17', label: 'Gravado – IVAP' },
+    { code: '20', label: 'Exonerado – Operación Onerosa' },
+    { code: '21', label: 'Exonerado – Transferencia Gratuita' },
+    { code: '30', label: 'Inafecto – Operación Onerosa' },
+    { code: '31', label: 'Inafecto – Retiro por Bonificación' },
+    { code: '32', label: 'Inafecto – Retiro' },
+    { code: '33', label: 'Inafecto – Retiro por Muestras Médicas' },
+    { code: '34', label: 'Inafecto – Retiro por Convenio Colectivo' },
+    { code: '35', label: 'Inafecto – Retiro por premio' },
+    { code: '36', label: 'Inafecto – Retiro por publicidad' },
+    { code: '37', label: 'Inafecto – Transferencia gratuita' },
+    { code: '40', label: 'Exportación de bienes o servicios' },
   ];
 
 
@@ -41,7 +58,7 @@ export default function NewProduct() {
     paddingVertical: 8,
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const newErrors: Record<string, string> = {};
     if (!internalCode) newErrors.internalCode = 'Requerido';
     if (!name) newErrors.name = 'Requerido';
@@ -49,7 +66,28 @@ export default function NewProduct() {
     if (!category) newErrors.category = 'Requerido';
     setErrors(newErrors);
     if (Object.keys(newErrors).length === 0) {
-      router.back();
+      try {
+        await apiFetch('/api/sellnow/items', {
+          method: 'POST',
+          body: JSON.stringify({
+            internalCode,
+            barcode,
+            name,
+            description,
+            price,
+            includesIgv,
+            category,
+            affectation,
+            purchasePrice,
+            stock,
+            minStock,
+            image,
+          }),
+        });
+        router.back();
+      } catch (e: any) {
+        Alert.alert('Error', e.message);
+      }
     }
   };
 
@@ -131,20 +169,22 @@ export default function NewProduct() {
             onPress={() => setShowAffectations(!showAffectations)}
             style={[inputStyle, { justifyContent: 'center' }]}
           >
-            <ThemedText>{affectation || 'Seleccione'}</ThemedText>
+            <ThemedText>{
+              affectations.find((af) => af.code === affectation)?.label || 'Seleccione'
+            }</ThemedText>
           </TouchableOpacity>
           {showAffectations && (
             <View style={{ borderWidth: 1, borderColor: '#E2E8F0', borderRadius: 12, marginTop: 4 }}>
               {affectations.map((af) => (
                 <TouchableOpacity
-                  key={af}
+                  key={af.code}
                   onPress={() => {
-                    setAffectation(af);
+                    setAffectation(af.code);
                     setShowAffectations(false);
                   }}
                   style={{ padding: 8 }}
                 >
-                  <ThemedText>{af}</ThemedText>
+                  <ThemedText>{af.label}</ThemedText>
                 </TouchableOpacity>
               ))}
             </View>
