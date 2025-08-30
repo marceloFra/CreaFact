@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ScrollView, View, TextInput, Switch, TouchableOpacity, Alert } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useRouter } from 'expo-router';
@@ -24,8 +25,6 @@ export default function NewProduct() {
   const [minStock, setMinStock] = useState('');
   const [image, setImage] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [showCategories, setShowCategories] = useState(false);
-  const [showAffectations, setShowAffectations] = useState(false);
   const categories = ['General', 'Electrónica', 'Alimentos'];
   const affectations = [
     { code: '10', label: 'Gravado – Operación Onerosa' },
@@ -139,57 +138,31 @@ export default function NewProduct() {
           </View>
           <View>
             <ThemedText>Categoría</ThemedText>
-            <TouchableOpacity
-              onPress={() => setShowCategories(!showCategories)}
-              style={[inputStyle, { justifyContent: 'center' }]}
+            <Picker
+              selectedValue={category}
+              onValueChange={setCategory}
+              style={inputStyle}
             >
-              <ThemedText>{category || 'Seleccione'}</ThemedText>
-            </TouchableOpacity>
-            {showCategories && (
-              <View style={{ borderWidth: 1, borderColor: '#E2E8F0', borderRadius: 12, marginTop: 4 }}>
-                {categories.map((cat) => (
-                  <TouchableOpacity
-                    key={cat}
-                    onPress={() => {
-                      setCategory(cat);
-                      setShowCategories(false);
-                    }}
-                    style={{ padding: 8 }}
-                  >
-                    <ThemedText>{cat}</ThemedText>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            )}
-          {errors.category && <ThemedText style={{ color: 'red' }}>{errors.category}</ThemedText>}
-        </View>
-        <View>
-          <ThemedText>Afectación</ThemedText>
-          <TouchableOpacity
-            onPress={() => setShowAffectations(!showAffectations)}
-            style={[inputStyle, { justifyContent: 'center' }]}
-          >
-            <ThemedText>{
-              affectations.find((af) => af.code === affectation)?.label || 'Seleccione'
-            }</ThemedText>
-          </TouchableOpacity>
-          {showAffectations && (
-            <View style={{ borderWidth: 1, borderColor: '#E2E8F0', borderRadius: 12, marginTop: 4 }}>
-              {affectations.map((af) => (
-                <TouchableOpacity
-                  key={af.code}
-                  onPress={() => {
-                    setAffectation(af.code);
-                    setShowAffectations(false);
-                  }}
-                  style={{ padding: 8 }}
-                >
-                  <ThemedText>{af.label}</ThemedText>
-                </TouchableOpacity>
+              <Picker.Item label="Seleccione" value="" />
+              {categories.map((cat) => (
+                <Picker.Item key={cat} label={cat} value={cat} />
               ))}
-            </View>
-          )}
-        </View>
+            </Picker>
+            {errors.category && <ThemedText style={{ color: 'red' }}>{errors.category}</ThemedText>}
+          </View>
+          <View>
+            <ThemedText>Afectación</ThemedText>
+            <Picker
+              selectedValue={affectation}
+              onValueChange={setAffectation}
+              style={inputStyle}
+            >
+              <Picker.Item label="Seleccione" value="" />
+              {affectations.map((af) => (
+                <Picker.Item key={af.code} label={af.label} value={af.code} />
+              ))}
+            </Picker>
+          </View>
         <View>
           <ThemedText>Precio unitario de compra</ThemedText>
           <TextInput
