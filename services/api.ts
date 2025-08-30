@@ -10,7 +10,7 @@ export async function apiFetch(path: string, init: RequestInit = {}) {
   const token = await getToken();
   const session = await getSession();
   const baseURL = session?.baseURL || "";
-  const headers = { ...(init.headers || {}), "Content-Type": "application/json" };
+  const headers = { Accept: "application/json", ...(init.headers || {}), "Content-Type": "application/json" };
   if (token) (headers as any).Authorization = `Bearer ${token}`;
   const resp = await fetch(`${normalizeBaseURL(baseURL)}${path}`, { ...init, headers });
   if (!resp.ok) throw new Error((await safeMsg(resp)) || `Error ${resp.status}`);
