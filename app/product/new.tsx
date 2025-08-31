@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ScrollView, View, TextInput, Switch, TouchableOpacity, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -9,6 +9,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import { apiFetch } from '@/services/api';
+import { fetchCategories, Category } from '@/services/categories';
 
 export default function NewProduct() {
   const router = useRouter();
@@ -19,13 +20,13 @@ export default function NewProduct() {
   const [price, setPrice] = useState('');
   const [includesIgv, setIncludesIgv] = useState(false);
   const [category, setCategory] = useState('');
+  const [categories, setCategories] = useState<Category[]>([]);
   const [affectation, setAffectation] = useState<string>('');
   const [purchasePrice, setPurchasePrice] = useState('');
   const [stock, setStock] = useState('');
   const [minStock, setMinStock] = useState('');
   const [image, setImage] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const categories = ['General', 'Electrónica', 'Alimentos'];
   const affectations = [
     { code: '10', label: 'Gravado – Operación Onerosa' },
     { code: '11', label: 'Gravado – Retiro por premio' },
@@ -48,6 +49,9 @@ export default function NewProduct() {
     { code: '40', label: 'Exportación de bienes o servicios' },
   ];
 
+  useEffect(() => {
+    fetchCategories().then(setCategories).catch(e => Alert.alert('Error', e.message));
+  }, []);
 
   const inputStyle = {
     borderWidth: 1,
@@ -75,7 +79,7 @@ export default function NewProduct() {
             description,
             price,
             includesIgv,
-            category,
+            category: Number(category),
             affectation,
             purchasePrice,
             stock,
@@ -145,7 +149,7 @@ export default function NewProduct() {
             >
               <Picker.Item label="Seleccione" value="" />
               {categories.map((cat) => (
-                <Picker.Item key={cat} label={cat} value={cat} />
+                <Picker.Item key={cat.id} label={cat.name} value={String(cat.id)} />
               ))}
             </Picker>
             {errors.category && <ThemedText style={{ color: 'red' }}>{errors.category}</ThemedText>}
