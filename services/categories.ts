@@ -7,7 +7,7 @@ export interface Category {
 }
 
 export async function fetchCategories(): Promise<Category[]> {
-  const resp = await apiFetch('/categories-records');
+  const resp = await apiFetch('/api/categories-records');
   const arr = resp.data ?? [];
   return arr.map((c: any) => ({
     id: c.id,
