@@ -29,7 +29,7 @@ export function NameAutocomplete({ value, onChangeText, onSelect, inputStyle }: 
   };
 
   return (
-    <View>
+    <View style={{ position: 'relative', overflow: 'visible' }}>
       <TextInput
         value={value}
         onChangeText={handleChange}
@@ -38,7 +38,20 @@ export function NameAutocomplete({ value, onChangeText, onSelect, inputStyle }: 
         autoComplete="name"
       />
       {suggestions.length > 0 && (
-        <View style={{ borderWidth: 1, borderColor: '#E2E8F0', borderRadius: 12, marginTop: 4 }}>
+        <View
+          style={{
+            position: 'absolute',
+            top: '100%',
+            left: 0,
+            zIndex: 10,
+            backgroundColor: '#fff',
+            width: '100%',
+            borderWidth: 1,
+            borderColor: '#E2E8F0',
+            borderRadius: 12,
+            marginTop: 4,
+          }}
+        >
           {suggestions.map(item => (
             <TouchableOpacity
               key={item.id}
