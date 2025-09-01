@@ -10,14 +10,13 @@ import { ThemedView } from '@/components/ThemedView';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import { apiFetch } from '@/services/api';
 import { fetchCategories, Category } from '@/services/categories';
-import { searchItems, SearchItem } from '@/services/documents';
+import { NameAutocomplete } from '@/components/NameAutocomplete';
 
 export default function NewProduct() {
   const router = useRouter();
   const [internalCode, setInternalCode] = useState('');
   const [barcode, setBarcode] = useState('');
   const [name, setName] = useState('');
-  const [nameSuggestions, setNameSuggestions] = useState<SearchItem[]>([]);
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
   const [includesIgv, setIncludesIgv] = useState(false);
@@ -61,20 +60,6 @@ export default function NewProduct() {
     borderRadius: 12,
     paddingHorizontal: 12,
     paddingVertical: 8,
-  };
-
-  const handleNameChange = async (text: string) => {
-    setName(text);
-    if (text.length > 2) {
-      try {
-        const items = await searchItems(text);
-        setNameSuggestions(items);
-      } catch {
-        setNameSuggestions([]);
-      }
-    } else {
-      setNameSuggestions([]);
-    }
   };
 
   const handleSave = async () => {
@@ -135,23 +120,15 @@ export default function NewProduct() {
           </View>
           <View>
             <ThemedText>Nombre</ThemedText>
-            <TextInput value={name} onChangeText={handleNameChange} style={inputStyle} />
-            {nameSuggestions.length > 0 && (
-              <View style={{ borderWidth: 1, borderColor: '#E2E8F0', borderRadius: 12, marginTop: 4 }}>
-                {nameSuggestions.map(item => (
-                  <TouchableOpacity
-                    key={item.id}
-                    onPress={() => {
-                      setName(item.description);
-                      setPrice(String(item.sale_unit_price));
-                      setNameSuggestions([]);
-                    }}
-                  >
-                    <ThemedText style={{ padding: 8 }}>{item.full_description}</ThemedText>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            )}
+            <NameAutocomplete
+              value={name}
+              onChangeText={setName}
+              onSelect={(item) => {
+                setName(item.description);
+                setPrice(String(item.sale_unit_price));
+              }}
+              inputStyle={inputStyle}
+            />
             {errors.name && <ThemedText style={{ color: 'red' }}>{errors.name}</ThemedText>}
           </View>
           <View>
