@@ -43,6 +43,7 @@ export function NameAutocomplete({ value, onChangeText, onSelect, inputStyle }: 
             position: 'absolute',
             top: '100%',
             left: 0,
+            right: 0,
             zIndex: 10,
             backgroundColor: '#fff',
             width: '100%',
