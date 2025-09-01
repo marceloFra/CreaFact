@@ -26,6 +26,6 @@ export async function searchItems(input: string, opt: SearchOptions = {}): Promi
     search_factory_code_items: opt.search_factory_code_items ? '1' : '0',
   });
 
-  const resp = await apiFetch(`/documents/search-items?${params.toString()}`);
+  const resp = await apiFetch(`/api/document/search-items?${params.toString()}`);
   return resp.items || [];
 }
