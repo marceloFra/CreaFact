@@ -61,6 +61,7 @@ export function NameAutocomplete({ value, onChangeText, onSelect, inputStyle }: 
                 onSelect(item);
                 setSuggestions([]);
               }}
+              style={{ padding: 8 }}
             >
               <ThemedText style={{ padding: 8 }}>{item.description}</ThemedText>
             </TouchableOpacity>
