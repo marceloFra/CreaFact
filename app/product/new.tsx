@@ -127,7 +127,6 @@ export default function NewProduct() {
                 setName(item.description);
                 setPrice(String(item.sale_unit_price));
               }}
-              inputStyle={inputStyle}
             />
             {errors.name && <ThemedText style={{ color: 'red' }}>{errors.name}</ThemedText>}
           </View>
