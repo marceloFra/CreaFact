@@ -10,7 +10,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import { apiFetch } from '@/services/api';
 import { fetchCategories, Category } from '@/services/categories';
-import { NameAutocomplete } from '@/components/NameAutocomplete';
+import { AutocompleteDropdown } from '@/components/AutocompleteDropdown';
 
 export default function NewProduct() {
   const router = useRouter();
@@ -120,7 +120,7 @@ export default function NewProduct() {
           </View>
           <View>
             <ThemedText>Nombre</ThemedText>
-            <NameAutocomplete
+            <AutocompleteDropdown
               value={name}
               onChangeText={setName}
               onSelect={(item) => {
