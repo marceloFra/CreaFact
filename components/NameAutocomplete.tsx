@@ -63,12 +63,7 @@ export function NameAutocomplete({ value, onChangeText, onSelect, inputStyle }: 
               }}
               style={{ padding: 8 }}
             >
-              <ThemedText>
-                {item.item_code} - {item.description}
-              </ThemedText>
-              <ThemedText style={{ color: '#64748B' }}>
-                S/. {item.sale_unit_price} · Stock: {item.stock}
-              </ThemedText>
+              <ThemedText style={{ padding: 8 }}>{item.description}</ThemedText>
             </TouchableOpacity>
           ))}
         </View>
