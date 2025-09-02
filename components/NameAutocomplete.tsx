@@ -13,6 +13,7 @@ interface Props {
 
 export function NameAutocomplete({ value, onChangeText, onSelect, inputStyle }: Props) {
   const [suggestions, setSuggestions] = useState<SearchItem[]>([]);
+  const [inputHeight, setInputHeight] = useState(0);
 
   const handleChange = async (text: string) => {
     onChangeText(text);
@@ -36,17 +37,17 @@ export function NameAutocomplete({ value, onChangeText, onSelect, inputStyle }: 
         style={inputStyle}
         autoCorrect
         autoComplete="name"
+        onLayout={({ nativeEvent }) => setInputHeight(nativeEvent.layout.height)}
       />
       {suggestions.length > 0 && (
         <View
           style={{
             position: 'absolute',
-            top: '100%',
+            top: inputHeight,
             left: 0,
             right: 0,
             zIndex: 10,
             backgroundColor: '#fff',
-            width: '100%',
             borderWidth: 1,
             borderColor: '#E2E8F0',
             borderRadius: 12,
@@ -61,7 +62,7 @@ export function NameAutocomplete({ value, onChangeText, onSelect, inputStyle }: 
                 setSuggestions([]);
               }}
             >
-              <ThemedText style={{ padding: 8 }}>{item.full_description}</ThemedText>
+              <ThemedText style={{ padding: 8 }}>{item.description}</ThemedText>
             </TouchableOpacity>
           ))}
         </View>
