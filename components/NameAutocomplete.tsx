@@ -20,8 +20,6 @@ export function NameAutocomplete({ value, onChangeText, onSelect, inputStyle }: 
     if (text.length > 2) {
       try {
         const items = await searchItems(text);
-        console.log('items response:', items);
-
         setSuggestions(items);
       } catch {
         setSuggestions([]);
