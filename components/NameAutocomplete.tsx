@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { View, TextInput, TouchableOpacity } from 'react-native';
+import { TextInput, TouchableOpacity, View } from 'react-native';
 
+import { SearchItem, searchItems } from '@/services/documents';
 import { ThemedText } from './ThemedText';
-import { searchItems, SearchItem } from '@/services/documents';
 
 interface Props {
   value: string;
@@ -20,6 +20,8 @@ export function NameAutocomplete({ value, onChangeText, onSelect, inputStyle }: 
     if (text.length > 2) {
       try {
         const items = await searchItems(text);
+        console.log('items response:', items);
+
         setSuggestions(items);
       } catch {
         setSuggestions([]);
