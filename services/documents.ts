@@ -27,7 +27,6 @@ export async function searchItems(input: string, opt: SearchOptions = {}): Promi
   });
 
   const resp = await apiFetch(`/api/document/search-items?${params.toString()}`);
-    console.log('searchItems response:', resp);
 
   return resp as SearchItem[];
 }
