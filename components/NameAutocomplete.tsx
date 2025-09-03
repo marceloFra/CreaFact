@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { FlatList, TextInput, TouchableOpacity, View } from 'react-native';
+import { ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
 
 import { SearchItem, searchItems } from '@/services/documents';
 import { ThemedText } from './ThemedText';
@@ -87,14 +87,14 @@ export function NameAutocomplete({
             marginTop: 4,
           }}
         >
-          <FlatList
-            data={suggestions}
-            keyExtractor={(item) => String(item.id)}
+          <ScrollView
             nestedScrollEnabled
             keyboardShouldPersistTaps="handled"
-            style={{ height: MAX_VISIBLE * ITEM_HEIGHT }}
-            renderItem={({ item }) => (
+            style={{ maxHeight: MAX_VISIBLE * ITEM_HEIGHT }}
+          >
+            {suggestions.map((item) => (
               <TouchableOpacity
+                key={item.id}
                 onPress={() => {
                   onSelect(item);
                   clear();
@@ -103,8 +103,8 @@ export function NameAutocomplete({
               >
                 <ThemedText style={{ padding: 8 }}>{item.description}</ThemedText>
               </TouchableOpacity>
-            )}
-          />
+            ))}
+          </ScrollView>
         </View>
       )}
 
