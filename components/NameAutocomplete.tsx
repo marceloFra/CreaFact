@@ -49,7 +49,7 @@ export function NameAutocomplete({ value, onChangeText, onSelect, inputStyle }: 
   };
 
   return (
-    <View style={{ position: 'relative', overflow: 'visible' }}>
+    <View style={{ position: 'relative', overflow: 'visible', zIndex: 1000 }}>
       <TextInput
         value={value}
         onChangeText={handleChange}     // ⬅️ usa handleChange
@@ -66,7 +66,7 @@ export function NameAutocomplete({ value, onChangeText, onSelect, inputStyle }: 
             top: inputHeight,
             left: 0,
             right: 0,
-            zIndex: 1000,
+            zIndex: 1001,
             elevation: 10,
             backgroundColor: '#fff',
             borderWidth: 1,
