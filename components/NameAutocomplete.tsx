@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
+import { FlatList, TextInput, TouchableOpacity, View } from 'react-native';
 
 import { SearchItem, searchItems } from '@/services/documents';
 import { ThemedText } from './ThemedText';
@@ -9,9 +9,16 @@ interface Props {
   onChangeText: (text: string) => void;
   onSelect: (item: SearchItem) => void;
   inputStyle?: any;
+  onVisibilityChange?: (visible: boolean) => void;
 }
 
-export function NameAutocomplete({ value, onChangeText, onSelect, inputStyle }: Props) {
+export function NameAutocomplete({
+  value,
+  onChangeText,
+  onSelect,
+  inputStyle,
+  onVisibilityChange,
+}: Props) {
   const [inputHeight, setInputHeight] = useState(0);
   const [suggestions, setSuggestions] = useState<SearchItem[]>([]); // ⬅️ aquí defines Suggestions
   const [loading, setLoading] = useState(false);
@@ -20,7 +27,12 @@ export function NameAutocomplete({ value, onChangeText, onSelect, inputStyle }: 
   const MAX_VISIBLE = 5;
   const ITEM_HEIGHT = 48;
 
-  const clear = () => setSuggestions([]);
+  const updateSuggestions = (items: SearchItem[]) => {
+    setSuggestions(items);
+    onVisibilityChange?.(items.length > 0);
+  };
+
+  const clear = () => updateSuggestions([]);
 
   const handleChange = async (text: string) => {
     onChangeText(text);
@@ -35,11 +47,11 @@ export function NameAutocomplete({ value, onChangeText, onSelect, inputStyle }: 
       lastQueryRef.current = text;
 
       const res = await searchItems(text);
-      const items: SearchItem[] = res?.data?.items ?? [];
+      const items: SearchItem[] = (res as any)?.data?.items ?? (Array.isArray(res) ? res : []);
 
       // evita que respuestas antiguas sobreescriban el estado
       if (lastQueryRef.current === text) {
-        setSuggestions(items);
+        updateSuggestions(items);
       }
     } catch {
       clear();
@@ -75,14 +87,14 @@ export function NameAutocomplete({ value, onChangeText, onSelect, inputStyle }: 
             marginTop: 4,
           }}
         >
-          <ScrollView
+          <FlatList
+            data={suggestions}
+            keyExtractor={(item) => String(item.id)}
             nestedScrollEnabled
             keyboardShouldPersistTaps="handled"
-            style={{ maxHeight: MAX_VISIBLE * ITEM_HEIGHT }}
-          >
-            {suggestions.map((item) => (
+            style={{ height: MAX_VISIBLE * ITEM_HEIGHT }}
+            renderItem={({ item }) => (
               <TouchableOpacity
-                key={item.id}
                 onPress={() => {
                   onSelect(item);
                   clear();
@@ -91,8 +103,8 @@ export function NameAutocomplete({ value, onChangeText, onSelect, inputStyle }: 
               >
                 <ThemedText style={{ padding: 8 }}>{item.description}</ThemedText>
               </TouchableOpacity>
-            ))}
-          </ScrollView>
+            )}
+          />
         </View>
       )}
 

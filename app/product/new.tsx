@@ -27,6 +27,7 @@ export default function NewProduct() {
   const [stock, setStock] = useState('');
   const [minStock, setMinStock] = useState('');
   const [image, setImage] = useState<string | null>(null);
+  const [nameListVisible, setNameListVisible] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const affectations = [
     { code: '10', label: 'Gravado – Operación Onerosa' },
@@ -105,6 +106,7 @@ export default function NewProduct() {
         </View>
         <ScrollView
           nestedScrollEnabled
+          scrollEnabled={!nameListVisible}
           contentContainerStyle={{ padding: 16, gap: 12 }}
         >
           <View>
@@ -131,6 +133,7 @@ export default function NewProduct() {
                 setPrice(String(item.sale_unit_price));
               }}
               inputStyle={inputStyle}
+              onVisibilityChange={setNameListVisible}
             />
             {errors.name && <ThemedText style={{ color: 'red' }}>{errors.name}</ThemedText>}
           </View>
