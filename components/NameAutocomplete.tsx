@@ -87,24 +87,26 @@ export function NameAutocomplete({
             marginTop: 4,
           }}
         >
-          <ScrollView
-            nestedScrollEnabled
-            keyboardShouldPersistTaps="handled"
-            style={{ maxHeight: MAX_VISIBLE * ITEM_HEIGHT }}
-          >
-            {suggestions.map((item) => (
-              <TouchableOpacity
-                key={item.id}
-                onPress={() => {
-                  onSelect(item);
-                  clear();
-                }}
-                style={{ padding: 8 }}
-              >
-                <ThemedText style={{ padding: 8 }}>{item.description}</ThemedText>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
+          <View style={{ maxHeight: MAX_VISIBLE * ITEM_HEIGHT, overflow: 'hidden' }}>
+            <ScrollView
+              nestedScrollEnabled
+              keyboardShouldPersistTaps="handled"
+              style={{}}
+            >
+              {suggestions.map((item) => (
+                <TouchableOpacity
+                  key={item.id}
+                  onPress={() => {
+                    onSelect(item);
+                    clear();
+                  }}
+                  style={{ padding: 8 }}
+                >
+                  <ThemedText style={{ padding: 8 }}>{item.description}</ThemedText>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
         </View>
       )}
 
