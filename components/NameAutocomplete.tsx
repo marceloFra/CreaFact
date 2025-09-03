@@ -60,6 +60,9 @@ export function NameAutocomplete({
     }
   };
 
+  const visibleCount = Math.min(suggestions.length, MAX_VISIBLE);
+  const listHeight = visibleCount * ITEM_HEIGHT;
+
   return (
     <View style={{ position: 'relative', overflow: 'visible', zIndex: 1000 }}>
       <TextInput
@@ -90,7 +93,7 @@ export function NameAutocomplete({
           <ScrollView
             nestedScrollEnabled
             keyboardShouldPersistTaps="handled"
-            style={{ maxHeight: MAX_VISIBLE * ITEM_HEIGHT }}
+            style={{ height: listHeight }}
           >
             {suggestions.map((item) => (
               <TouchableOpacity
