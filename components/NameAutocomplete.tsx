@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { TextInput, TouchableOpacity, View } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { FlatList, TextInput, TouchableOpacity, View } from 'react-native';
 
 import { SearchItem, searchItems } from '@/services/documents';
 import { ThemedText } from './ThemedText';
@@ -12,22 +12,36 @@ interface Props {
 }
 
 export function NameAutocomplete({ value, onChangeText, onSelect, inputStyle }: Props) {
-  const [suggestions, setSuggestions] = useState<SearchItem[]>([]);
   const [inputHeight, setInputHeight] = useState(0);
+  const [suggestions, setSuggestions] = useState<SearchItem[]>([]); // ⬅️ aquí defines Suggestions
+  const [loading, setLoading] = useState(false);
+  const lastQueryRef = useRef('');
+
+  const clear = () => setSuggestions([]);
 
   const handleChange = async (text: string) => {
     onChangeText(text);
-    if (text.length > 2) {
-      try {
-        const items = await searchItems(text);
-        console.log('items response:', items.data.items);
 
-        setSuggestions(items.data.items);
-      } catch {
-        setSuggestions([]);
+    if (text.length <= 2) {
+      clear();
+      return;
+    }
+
+    try {
+      setLoading(true);
+      lastQueryRef.current = text;
+
+      const res = await searchItems(text);
+      const items: SearchItem[] = res?.data?.items ?? [];
+
+      // evita que respuestas antiguas sobreescriban el estado
+      if (lastQueryRef.current === text) {
+        setSuggestions(items);
       }
-    } else {
-      setSuggestions([]);
+    } catch {
+      clear();
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -35,14 +49,18 @@ export function NameAutocomplete({ value, onChangeText, onSelect, inputStyle }: 
     <View style={{ position: 'relative', overflow: 'visible' }}>
       <TextInput
         value={value}
-        onChangeText={handleChange}
+        onChangeText={handleChange}     // ⬅️ usa handleChange
         style={inputStyle}
         autoCorrect
         autoComplete="name"
         onLayout={({ nativeEvent }) => setInputHeight(nativeEvent.layout.height)}
       />
+
       {suggestions.length > 0 && (
-        <View
+        <FlatList
+          keyboardShouldPersistTaps="handled"
+          data={suggestions}
+          keyExtractor={(item) => String(item.id)}
           style={{
             position: 'absolute',
             top: inputHeight,
@@ -55,22 +73,26 @@ export function NameAutocomplete({ value, onChangeText, onSelect, inputStyle }: 
             borderRadius: 12,
             marginTop: 4,
           }}
-        >
-          {suggestions.map(item => (
+          renderItem={({ item }) => (
             <TouchableOpacity
-              key={item.id}
               onPress={() => {
                 onSelect(item);
-                setSuggestions([]);
+                clear();
               }}
               style={{ padding: 8 }}
             >
               <ThemedText style={{ padding: 8 }}>{item.description}</ThemedText>
             </TouchableOpacity>
-          ))}
+          )}
+        />
+      )}
+
+      {/* Opcional: indicador de carga */}
+      {loading && suggestions.length === 0 && (
+        <View style={{ position: 'absolute', top: inputHeight + 4, left: 8 }}>
+          <ThemedText>Buscando…</ThemedText>
         </View>
       )}
     </View>
   );
 }
-
