@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TextInput, TouchableOpacity, View } from 'react-native';
 
 import { SearchItem, searchItems } from '@/services/documents';
@@ -15,20 +15,27 @@ export function NameAutocomplete({ value, onChangeText, onSelect, inputStyle }: 
   const [suggestions, setSuggestions] = useState<SearchItem[]>([]);
   const [inputHeight, setInputHeight] = useState(0);
 
-  const handleChange = async (text: string) => {
-    onChangeText(text);
-    if (text.length > 2) {
-      try {
-        const items = await searchItems(text);
-        console.log('items response:', items);
+  useEffect(() => {
+    const timeout = setTimeout(async () => {
+      if (value.length > 2) {
+        try {
+          const items = await searchItems(value);
+          console.log('items response:', items);
 
-        setSuggestions(items);
-      } catch {
+          setSuggestions(items);
+        } catch {
+          setSuggestions([]);
+        }
+      } else {
         setSuggestions([]);
       }
-    } else {
-      setSuggestions([]);
-    }
+    }, 300);
+
+    return () => clearTimeout(timeout);
+  }, [value]);
+
+  const handleChange = (text: string) => {
+    onChangeText(text);
   };
 
   return (
