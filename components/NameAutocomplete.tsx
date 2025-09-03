@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 import { SearchItem, searchItems } from '@/services/documents';
 import { ThemedText } from './ThemedText';
@@ -50,14 +51,30 @@ export function NameAutocomplete({ value, onChangeText, onSelect, inputStyle }: 
 
   return (
     <View style={{ position: 'relative', overflow: 'visible' }}>
-      <TextInput
-        value={value}
-        onChangeText={handleChange}     // ⬅️ usa handleChange
-        style={inputStyle}
-        autoCorrect
-        autoComplete="name"
+      <View
+        style={[inputStyle, { flexDirection: 'row', alignItems: 'center' }]}
         onLayout={({ nativeEvent }) => setInputHeight(nativeEvent.layout.height)}
-      />
+      >
+        <TextInput
+          value={value}
+          onChangeText={handleChange} // ⬅️ usa handleChange
+          style={{ flex: 1 }}
+          autoCorrect
+          autoComplete="name"
+        />
+
+        {value !== '' && (
+          <TouchableOpacity
+            onPress={() => {
+              onChangeText('');
+              clear();
+            }}
+            style={{ paddingHorizontal: 8 }}
+          >
+            <MaterialIcons name="close" size={20} color="#94A3B8" />
+          </TouchableOpacity>
+        )}
+      </View>
 
       {suggestions.length > 0 && (
         <View
