@@ -67,6 +67,7 @@ export function NameAutocomplete({ value, onChangeText, onSelect, inputStyle }: 
             left: 0,
             right: 0,
             zIndex: 10,
+            elevation: 10,
             backgroundColor: '#fff',
             borderWidth: 1,
             borderColor: '#E2E8F0',

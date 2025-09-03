@@ -121,7 +121,7 @@ export default function NewProduct() {
               </TouchableOpacity>
             </View>
           </View>
-          <View>
+          <View style={{ zIndex: 10, elevation: 10 }}>
             <ThemedText>Nombre</ThemedText>
             <NameAutocomplete
               value={name}
