@@ -120,8 +120,8 @@ export default function NewProduct() {
                 <IconSymbol name="camera.fill" size={24} color="#0F766E" />
               </TouchableOpacity>
             </View>
-          </View>
-          <View style={{ zIndex: 10 }}>
+          </View> 
+          <View style={{ zIndex: 10, elevation: 10 }}> 
             <ThemedText>Nombre</ThemedText>
             <NameAutocomplete
               value={name}
