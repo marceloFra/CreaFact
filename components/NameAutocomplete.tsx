@@ -75,6 +75,7 @@ export function NameAutocomplete({ value, onChangeText, onSelect, inputStyle }: 
           }}
         >
           <ScrollView
+            nestedScrollEnabled
             keyboardShouldPersistTaps="handled"
             style={{ maxHeight: MAX_VISIBLE * ITEM_HEIGHT }}
           >
