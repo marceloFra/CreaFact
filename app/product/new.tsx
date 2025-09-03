@@ -107,6 +107,7 @@ export default function NewProduct() {
         <ScrollView
           nestedScrollEnabled
           scrollEnabled={!nameListVisible}
+          style={{ overflow: 'visible' }}
           contentContainerStyle={{ padding: 16, gap: 12 }}
         >
           <View>
@@ -123,7 +124,7 @@ export default function NewProduct() {
               </TouchableOpacity>
             </View>
           </View>
-          <View>
+          <View style={{ zIndex: 10, position: 'relative' }}>
             <ThemedText>Nombre</ThemedText>
             <NameAutocomplete
               value={name}
