@@ -103,7 +103,10 @@ export default function NewProduct() {
             <MaterialIcons name="close" size={24} color="#0F766E" />
           </TouchableOpacity>
         </View>
-        <ScrollView contentContainerStyle={{ padding: 16, gap: 12 }}>
+        <ScrollView
+          nestedScrollEnabled
+          contentContainerStyle={{ padding: 16, gap: 12 }}
+        >
           <View>
             <ThemedText>Código interno</ThemedText>
             <TextInput value={internalCode} onChangeText={setInternalCode} style={inputStyle} />
