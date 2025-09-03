@@ -17,6 +17,9 @@ export function NameAutocomplete({ value, onChangeText, onSelect, inputStyle }: 
   const [loading, setLoading] = useState(false);
   const lastQueryRef = useRef('');
 
+  const MAX_VISIBLE = 5;
+  const ITEM_HEIGHT = 48;
+
   const clear = () => setSuggestions([]);
 
   const handleChange = async (text: string) => {
@@ -71,7 +74,10 @@ export function NameAutocomplete({ value, onChangeText, onSelect, inputStyle }: 
             marginTop: 4,
           }}
         >
-          <ScrollView keyboardShouldPersistTaps="handled">
+          <ScrollView
+            keyboardShouldPersistTaps="handled"
+            style={{ maxHeight: MAX_VISIBLE * ITEM_HEIGHT }}
+          >
             {suggestions.map((item) => (
               <TouchableOpacity
                 key={item.id}
