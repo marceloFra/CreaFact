@@ -1,16 +1,16 @@
-import { useState, useEffect } from 'react';
-import { ScrollView, View, TextInput, Switch, TouchableOpacity, Alert } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { Picker } from '@react-native-picker/picker';
 import { useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { Alert, ScrollView, Switch, TextInput, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { NameAutocomplete } from '@/components/NameAutocomplete';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import { apiFetch } from '@/services/api';
-import { fetchCategories, Category } from '@/services/categories';
-import { NameAutocomplete } from '@/components/NameAutocomplete';
+import { Category, fetchCategories } from '@/services/categories';
 
 export default function NewProduct() {
   const router = useRouter();
@@ -120,8 +120,8 @@ export default function NewProduct() {
                 <IconSymbol name="camera.fill" size={24} color="#0F766E" />
               </TouchableOpacity>
             </View>
-          </View>
-          <View style={{ zIndex: 10, elevation: 10 }}>
+          </View> 
+          <View style={{ zIndex: 10, elevation: 10 }}> 
             <ThemedText>Nombre</ThemedText>
             <NameAutocomplete
               value={name}
