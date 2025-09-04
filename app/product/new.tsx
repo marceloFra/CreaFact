@@ -19,10 +19,10 @@ export default function NewProduct() {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
-  const [includesIgv, setIncludesIgv] = useState(false);
+  const [includesIgv, setIncludesIgv] = useState(true);
   const [category, setCategory] = useState('');
   const [categories, setCategories] = useState<Category[]>([]);
-  const [affectation, setAffectation] = useState<string>('');
+  const [affectation, setAffectation] = useState<string>('10');
   const [purchasePrice, setPurchasePrice] = useState('');
   const [stock, setStock] = useState('');
   const [minStock, setMinStock] = useState('');
