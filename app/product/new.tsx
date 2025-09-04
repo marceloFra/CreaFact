@@ -2,7 +2,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Picker } from '@react-native-picker/picker';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Alert, ScrollView, Switch, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, KeyboardAvoidingView, Platform, ScrollView, Switch, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { NameAutocomplete } from '@/components/NameAutocomplete';
@@ -103,19 +103,41 @@ export default function NewProduct() {
             <MaterialIcons name="close" size={24} color="#0F766E" />
           </TouchableOpacity>
         </View>
-        <ScrollView
-          nestedScrollEnabled
-          contentContainerStyle={{ padding: 16, gap: 12 }}
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
+          <ScrollView
+            nestedScrollEnabled
+            contentContainerStyle={{ padding: 16, gap: 12 }}
+            keyboardShouldPersistTaps="handled"
+          >
           <View>
             <ThemedText>Código interno</ThemedText>
-            <TextInput value={internalCode} onChangeText={setInternalCode} style={inputStyle} />
+            <View style={[inputStyle, { flexDirection: 'row', alignItems: 'center' }]}>
+              <TextInput value={internalCode} onChangeText={setInternalCode} style={{ flex: 1 }} />
+              {internalCode !== '' && (
+                <TouchableOpacity onPress={() => setInternalCode('')} style={{ paddingHorizontal: 8 }}>
+                  <MaterialIcons name="close" size={20} color="#94A3B8" />
+                </TouchableOpacity>
+              )}
+            </View>
             {errors.internalCode && <ThemedText style={{ color: 'red' }}>{errors.internalCode}</ThemedText>}
           </View>
           <View>
             <ThemedText>Código de barras</ThemedText>
-            <View style={{ flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: '#E2E8F0', borderRadius: 12, paddingHorizontal: 12 }}>
-              <TextInput value={barcode} onChangeText={setBarcode} style={{ flex: 1, paddingVertical: 8 }} />
+            <View
+              style={[
+                inputStyle,
+                { flexDirection: 'row', alignItems: 'center' },
+              ]}
+            >
+              <TextInput value={barcode} onChangeText={setBarcode} style={{ flex: 1 }} />
+              {barcode !== '' && (
+                <TouchableOpacity onPress={() => setBarcode('')} style={{ paddingHorizontal: 8 }}>
+                  <MaterialIcons name="close" size={20} color="#94A3B8" />
+                </TouchableOpacity>
+              )}
               <TouchableOpacity onPress={() => { }}>
                 <IconSymbol name="camera.fill" size={24} color="#0F766E" />
               </TouchableOpacity>
@@ -134,20 +156,39 @@ export default function NewProduct() {
             />
             {errors.name && <ThemedText style={{ color: 'red' }}>{errors.name}</ThemedText>}
           </View>
-          <View>
-            <ThemedText>Descripción</ThemedText>
-            <TextInput
-              value={description}
-              onChangeText={setDescription}
-              style={[inputStyle, { height: 80 }]}
-              multiline
-            />
-          </View>
-          <View>
-            <ThemedText>Precio unitario</ThemedText>
-            <TextInput value={price} onChangeText={setPrice} keyboardType="numeric" style={inputStyle} />
-            {errors.price && <ThemedText style={{ color: 'red' }}>{errors.price}</ThemedText>}
-          </View>
+            <View>
+              <ThemedText>Descripción</ThemedText>
+              <View style={[inputStyle, { flexDirection: 'row', alignItems: 'center', height: 80 }]}>
+                <TextInput
+                  value={description}
+                  onChangeText={setDescription}
+                  multiline
+                  style={{ flex: 1, textAlignVertical: 'top', height: '100%' }}
+                />
+                {description !== '' && (
+                  <TouchableOpacity onPress={() => setDescription('')} style={{ paddingHorizontal: 8 }}>
+                    <MaterialIcons name="close" size={20} color="#94A3B8" />
+                  </TouchableOpacity>
+                )}
+              </View>
+            </View>
+            <View>
+              <ThemedText>Precio unitario</ThemedText>
+              <View style={[inputStyle, { flexDirection: 'row', alignItems: 'center' }]}>
+                <TextInput
+                  value={price}
+                  onChangeText={setPrice}
+                  keyboardType="numeric"
+                  style={{ flex: 1 }}
+                />
+                {price !== '' && (
+                  <TouchableOpacity onPress={() => setPrice('')} style={{ paddingHorizontal: 8 }}>
+                    <MaterialIcons name="close" size={20} color="#94A3B8" />
+                  </TouchableOpacity>
+                )}
+              </View>
+              {errors.price && <ThemedText style={{ color: 'red' }}>{errors.price}</ThemedText>}
+            </View>
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
             <ThemedText>Incluye IGV</ThemedText>
             <Switch value={includesIgv} onValueChange={setIncludesIgv} />
@@ -181,20 +222,51 @@ export default function NewProduct() {
           </View>
         <View>
           <ThemedText>Precio unitario de compra</ThemedText>
-          <TextInput
-            value={purchasePrice}
-            onChangeText={setPurchasePrice}
-            keyboardType="numeric"
-            style={inputStyle}
-          />
+          <View style={[inputStyle, { flexDirection: 'row', alignItems: 'center' }]}>
+            <TextInput
+              value={purchasePrice}
+              onChangeText={setPurchasePrice}
+              keyboardType="numeric"
+              style={{ flex: 1 }}
+            />
+            {purchasePrice !== '' && (
+              <TouchableOpacity onPress={() => setPurchasePrice('')} style={{ paddingHorizontal: 8 }}>
+                <MaterialIcons name="close" size={20} color="#94A3B8" />
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
         <View>
           <ThemedText>Stock</ThemedText>
-          <TextInput value={stock} onChangeText={setStock} keyboardType="numeric" style={inputStyle} />
+          <View style={[inputStyle, { flexDirection: 'row', alignItems: 'center' }]}>
+            <TextInput
+              value={stock}
+              onChangeText={setStock}
+              keyboardType="numeric"
+              style={{ flex: 1 }}
+            />
+            {stock !== '' && (
+              <TouchableOpacity onPress={() => setStock('')} style={{ paddingHorizontal: 8 }}>
+                <MaterialIcons name="close" size={20} color="#94A3B8" />
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
         <View>
           <ThemedText>Stock mínimo</ThemedText>
-          <TextInput value={minStock} onChangeText={setMinStock} keyboardType="numeric" style={inputStyle} />
+          <View style={[inputStyle, { flexDirection: 'row', alignItems: 'center' }]}>
+            <TextInput
+              value={minStock}
+              onChangeText={setMinStock}
+              keyboardType="numeric"
+              style={{ flex: 1 }}
+            />
+            {minStock !== '' && (
+              <TouchableOpacity onPress={() => setMinStock('')} style={{ paddingHorizontal: 8 }}>
+                <MaterialIcons name="close" size={20} color="#94A3B8" />
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
         <View>
           <ThemedText>Cargar imagen</ThemedText>
@@ -218,10 +290,10 @@ export default function NewProduct() {
           style={{ backgroundColor: '#0F766E', padding: 12, borderRadius: 12, alignItems: 'center', marginTop: 8 }}
         >
           <ThemedText style={{ color: '#fff' }}>Guardar</ThemedText>
-
-          </TouchableOpacity>
-        </ScrollView>
-      </ThemedView>
+        </TouchableOpacity>
+      </ScrollView>
+    </KeyboardAvoidingView>
+    </ThemedView>
     </SafeAreaView>
   );
 }
