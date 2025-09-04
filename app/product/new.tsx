@@ -69,10 +69,9 @@ export default function NewProduct() {
 
   const handleSave = async () => {
     const newErrors: Record<string, string> = {};
-    if (!internalCode) newErrors.internalCode = 'Requerido';
     if (!name) newErrors.name = 'Requerido';
     if (!price) newErrors.price = 'Requerido';
-    if (!category) newErrors.category = 'Requerido';
+    if (!affectation) newErrors.affectation = 'Requerido';
     setErrors(newErrors);
     if (Object.keys(newErrors).length === 0) {
       try {
@@ -85,7 +84,7 @@ export default function NewProduct() {
             description,
             price,
             includesIgv,
-            category: Number(category),
+            category: category ? Number(category) : '',
             affectation,
             purchasePrice,
             stock,
@@ -127,7 +126,6 @@ export default function NewProduct() {
                 </TouchableOpacity>
               )}
             </View>
-            {errors.internalCode && <ThemedText style={{ color: 'red' }}>{errors.internalCode}</ThemedText>}
           </View>
           <View>
             <ThemedText>Código de barras</ThemedText>
@@ -215,7 +213,6 @@ export default function NewProduct() {
                 ))}
               </Picker>
             </View>
-            {errors.category && <ThemedText style={{ color: 'red' }}>{errors.category}</ThemedText>}
           </View>
           <View>
             <ThemedText>Afectación</ThemedText>
@@ -230,6 +227,7 @@ export default function NewProduct() {
                 ))}
               </Picker>
             </View>
+            {errors.affectation && <ThemedText style={{ color: 'red' }}>{errors.affectation}</ThemedText>}
           </View>
         <View>
           <ThemedText>Precio unitario de compra</ThemedText>
