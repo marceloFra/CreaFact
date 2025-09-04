@@ -195,30 +195,32 @@ export default function NewProduct() {
           </View>
           <View>
             <ThemedText>Categoría</ThemedText>
-            <Picker
-              selectedValue={category}
-              onValueChange={setCategory}
-              style={inputStyle}
-            >
-              <Picker.Item label="Seleccione" value="" />
-              {categories.map((cat) => (
-                <Picker.Item key={cat.id} label={cat.name} value={String(cat.id)} />
-              ))}
-            </Picker>
+            <View style={inputStyle}>
+              <Picker
+                selectedValue={category}
+                onValueChange={setCategory}
+              >
+                <Picker.Item label="Seleccione" value="" />
+                {categories.map((cat) => (
+                  <Picker.Item key={cat.id} label={cat.name} value={String(cat.id)} />
+                ))}
+              </Picker>
+            </View>
             {errors.category && <ThemedText style={{ color: 'red' }}>{errors.category}</ThemedText>}
           </View>
           <View>
             <ThemedText>Afectación</ThemedText>
-            <Picker
-              selectedValue={affectation}
-              onValueChange={setAffectation}
-              style={inputStyle}
-            >
-              <Picker.Item label="Seleccione" value="" />
-              {affectations.map((af) => (
-                <Picker.Item key={af.code} label={af.label} value={af.code} />
-              ))}
-            </Picker>
+            <View style={inputStyle}>
+              <Picker
+                selectedValue={affectation}
+                onValueChange={setAffectation}
+              >
+                <Picker.Item label="Seleccione" value="" />
+                {affectations.map((af) => (
+                  <Picker.Item key={af.code} label={af.label} value={af.code} />
+                ))}
+              </Picker>
+            </View>
           </View>
         <View>
           <ThemedText>Precio unitario de compra</ThemedText>
