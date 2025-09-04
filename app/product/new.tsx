@@ -11,6 +11,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import { apiFetch } from '@/services/api';
 import { Category, fetchCategories } from '@/services/categories';
+import { Colors } from '@/constants/Colors';
 
 export default function NewProduct() {
   const router = useRouter();
@@ -54,6 +55,8 @@ export default function NewProduct() {
     fetchCategories().then(setCategories).catch(e => Alert.alert('Error', e.message));
   }, []);
 
+  const switchColor = Colors.light.tint;
+
   const inputStyle = {
     borderWidth: 1,
     borderColor: '#E2E8F0',
@@ -61,6 +64,8 @@ export default function NewProduct() {
     paddingHorizontal: 12,
     paddingVertical: 8,
   };
+
+  const accentInputStyle = { ...inputStyle, borderColor: switchColor };
 
   const handleSave = async () => {
     const newErrors: Record<string, string> = {};
@@ -144,18 +149,18 @@ export default function NewProduct() {
             </View>
           </View>
           <View>
-            <ThemedText>Nombre</ThemedText>
-            <NameAutocomplete
-              value={name}
-              onChangeText={setName}
-              onSelect={(item) => {
-                setName(item.description);
-                setPrice(String(item.sale_unit_price));
-              }}
-              inputStyle={inputStyle}
-            />
-            {errors.name && <ThemedText style={{ color: 'red' }}>{errors.name}</ThemedText>}
-          </View>
+          <ThemedText>Nombre</ThemedText>
+          <NameAutocomplete
+            value={name}
+            onChangeText={setName}
+            onSelect={(item) => {
+              setName(item.description);
+              setPrice(String(item.sale_unit_price));
+            }}
+            inputStyle={accentInputStyle}
+          />
+          {errors.name && <ThemedText style={{ color: 'red' }}>{errors.name}</ThemedText>}
+        </View>
             <View>
               <ThemedText>Descripción</ThemedText>
               <View style={[inputStyle, { flexDirection: 'row', alignItems: 'center', height: 80 }]}>
@@ -174,7 +179,7 @@ export default function NewProduct() {
             </View>
             <View>
               <ThemedText>Precio unitario</ThemedText>
-              <View style={[inputStyle, { flexDirection: 'row', alignItems: 'center' }]}>
+              <View style={[accentInputStyle, { flexDirection: 'row', alignItems: 'center' }]}>
                 <TextInput
                   value={price}
                   onChangeText={setPrice}
@@ -191,7 +196,11 @@ export default function NewProduct() {
             </View>
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
             <ThemedText>Incluye IGV</ThemedText>
-            <Switch value={includesIgv} onValueChange={setIncludesIgv} />
+            <Switch
+              value={includesIgv}
+              onValueChange={setIncludesIgv}
+              trackColor={{ true: switchColor, false: '#E2E8F0' }}
+            />
           </View>
           <View>
             <ThemedText>Categoría</ThemedText>
@@ -210,7 +219,7 @@ export default function NewProduct() {
           </View>
           <View>
             <ThemedText>Afectación</ThemedText>
-            <View style={inputStyle}>
+            <View style={accentInputStyle}>
               <Picker
                 selectedValue={affectation}
                 onValueChange={setAffectation}
