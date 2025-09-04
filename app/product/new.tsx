@@ -9,8 +9,8 @@ import { NameAutocomplete } from '@/components/NameAutocomplete';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { IconSymbol } from '@/components/ui/IconSymbol';
-import { apiFetch } from '@/services/api';
 import { Category, fetchCategories } from '@/services/categories';
+import { createItem } from '@/services/items';
 import { Colors } from '@/constants/Colors';
 
 export default function NewProduct() {
@@ -75,22 +75,20 @@ export default function NewProduct() {
     setErrors(newErrors);
     if (Object.keys(newErrors).length === 0) {
       try {
-        await apiFetch('/api/sellnow/items', {
-          method: 'POST',
-          body: JSON.stringify({
-            internalCode,
-            barcode,
-            name,
-            description,
-            price,
-            includesIgv,
-            category: category ? Number(category) : '',
-            affectation,
-            purchasePrice,
-            stock,
-            minStock,
-            image,
-          }),
+        await createItem({
+          internal_id: internalCode,
+          description: name,
+          unit_type_id: 'NIU',
+          currency_type_id: 'PEN',
+          sale_unit_price: Number(price),
+          purchase_unit_price: purchasePrice ? Number(purchasePrice) : 0,
+          stock: stock ? Number(stock) : 0,
+          stock_min: minStock ? Number(minStock) : 0,
+          sale_affectation_igv_type_id: affectation,
+          purchase_affectation_igv_type_id: affectation,
+          item_code: internalCode || undefined,
+          barcode: barcode || undefined,
+          ...(image ? { image, temp_path: `/tmp/${image}` } : {}),
         });
         router.back();
       } catch (e: any) {
