@@ -2,7 +2,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Picker } from '@react-native-picker/picker';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Alert, ScrollView, Switch, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, KeyboardAvoidingView, Platform, ScrollView, Switch, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { NameAutocomplete } from '@/components/NameAutocomplete';
@@ -103,10 +103,15 @@ export default function NewProduct() {
             <MaterialIcons name="close" size={24} color="#0F766E" />
           </TouchableOpacity>
         </View>
-        <ScrollView
-          nestedScrollEnabled
-          contentContainerStyle={{ padding: 16, gap: 12 }}
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
+          <ScrollView
+            nestedScrollEnabled
+            contentContainerStyle={{ padding: 16, gap: 12 }}
+            keyboardShouldPersistTaps="handled"
+          >
           <View>
             <ThemedText>Código interno</ThemedText>
             <View style={[inputStyle, { flexDirection: 'row', alignItems: 'center' }]}>
@@ -285,10 +290,10 @@ export default function NewProduct() {
           style={{ backgroundColor: '#0F766E', padding: 12, borderRadius: 12, alignItems: 'center', marginTop: 8 }}
         >
           <ThemedText style={{ color: '#fff' }}>Guardar</ThemedText>
-
-          </TouchableOpacity>
-        </ScrollView>
-      </ThemedView>
+        </TouchableOpacity>
+      </ScrollView>
+    </KeyboardAvoidingView>
+    </ThemedView>
     </SafeAreaView>
   );
 }
