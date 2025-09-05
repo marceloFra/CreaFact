@@ -4,8 +4,8 @@ import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Alert, KeyboardAvoidingView, Modal, Platform, ScrollView, Switch, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
 import { Camera } from 'expo-camera';
+
 
 import { NameAutocomplete } from '@/components/NameAutocomplete';
 import { ThemedText } from '@/components/ThemedText';
@@ -77,6 +77,7 @@ export default function NewProduct() {
 
   const openScanner = async () => {
     const { status } = await Camera.requestCameraPermissionsAsync();
+
     if (status === 'granted') {
       setScanning(true);
     } else {
@@ -326,6 +327,7 @@ export default function NewProduct() {
         onRequestClose={() => setScanning(false)}
       >
         <Camera
+
           onBarCodeScanned={handleBarCodeScanned}
           style={{ flex: 1 }}
         />
