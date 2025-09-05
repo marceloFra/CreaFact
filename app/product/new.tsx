@@ -110,9 +110,8 @@ export default function NewProduct() {
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
           <ScrollView
-            style={{ flex: 1 }}
             nestedScrollEnabled
-            contentContainerStyle={{ padding: 16, gap: 12, paddingBottom: 16 }}
+            contentContainerStyle={{ flexGrow: 1, padding: 16, gap: 12, paddingBottom: 80 }}
             keyboardShouldPersistTaps="handled"
           >
           <View>
@@ -293,15 +292,15 @@ export default function NewProduct() {
             </ThemedText>
           </TouchableOpacity>
         </View>
+        <View style={{ padding: 16 }}>
+          <TouchableOpacity
+            onPress={handleSave}
+            style={{ backgroundColor: '#0F766E', padding: 12, borderRadius: 12, alignItems: 'center' }}
+          >
+            <ThemedText style={{ color: '#fff' }}>Guardar</ThemedText>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
-      <View style={{ padding: 16 }}>
-        <TouchableOpacity
-          onPress={handleSave}
-          style={{ backgroundColor: '#0F766E', padding: 12, borderRadius: 12, alignItems: 'center' }}
-        >
-          <ThemedText style={{ color: '#fff' }}>Guardar</ThemedText>
-        </TouchableOpacity>
-      </View>
     </KeyboardAvoidingView>
     </ThemedView>
     </SafeAreaView>
