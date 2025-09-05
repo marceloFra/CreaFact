@@ -2,8 +2,10 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Picker } from '@react-native-picker/picker';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Alert, KeyboardAvoidingView, Platform, ScrollView, Switch, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, KeyboardAvoidingView, Modal, Platform, ScrollView, Switch, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
+import { BarCodeScanner } from 'expo-barcode-scanner';
 
 import { NameAutocomplete } from '@/components/NameAutocomplete';
 import { ThemedText } from '@/components/ThemedText';
@@ -29,6 +31,7 @@ export default function NewProduct() {
   const [minStock, setMinStock] = useState('');
   const [image, setImage] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [scanning, setScanning] = useState(false);
   const affectations = [
     { code: '10', label: 'Gravado – Operación Onerosa' },
     { code: '11', label: 'Gravado – Retiro por premio' },
@@ -66,6 +69,20 @@ export default function NewProduct() {
   };
 
   const accentInputStyle = { ...inputStyle, borderColor: switchColor };
+
+  const handleBarCodeScanned = ({ data }: { type: string; data: string }) => {
+    setScanning(false);
+    setBarcode(data);
+  };
+
+  const openScanner = async () => {
+    const { status } = await BarCodeScanner.requestPermissionsAsync();
+    if (status === 'granted') {
+      setScanning(true);
+    } else {
+      Alert.alert('Permiso de cámara', 'Se requiere permiso para escanear códigos de barras');
+    }
+  };
 
   const handleSave = async () => {
     const newErrors: Record<string, string> = {};
@@ -139,7 +156,7 @@ export default function NewProduct() {
                   <MaterialIcons name="close" size={20} color="#94A3B8" />
                 </TouchableOpacity>
               )}
-              <TouchableOpacity onPress={() => { }}>
+              <TouchableOpacity onPress={openScanner}>
                 <IconSymbol name="camera.fill" size={24} color="#0F766E" />
               </TouchableOpacity>
             </View>
@@ -302,6 +319,23 @@ export default function NewProduct() {
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
+    {scanning && (
+      <Modal
+        animationType="slide"
+        presentationStyle="fullScreen"
+        onRequestClose={() => setScanning(false)}
+      >
+        <BarCodeScanner
+          onBarCodeScanned={handleBarCodeScanned}
+          style={{ flex: 1 }}
+        />
+        <View style={{ position: 'absolute', top: 40, right: 20 }}>
+          <TouchableOpacity onPress={() => setScanning(false)}>
+            <MaterialIcons name="close" size={24} color="#fff" />
+          </TouchableOpacity>
+        </View>
+      </Modal>
+    )}
     </ThemedView>
     </SafeAreaView>
   );
