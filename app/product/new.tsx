@@ -4,6 +4,8 @@ import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Alert, KeyboardAvoidingView, Modal, Platform, ScrollView, Switch, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Camera } from 'expo-camera';
+
 
 import { CameraView, useCameraPermissions } from 'expo-camera';
 
@@ -328,6 +330,7 @@ export default function NewProduct() {
       >
         <CameraView
           onBarcodeScanned={handleBarCodeScanned}
+
           style={{ flex: 1 }}
         />
         <View style={{ position: 'absolute', top: 40, right: 20 }}>
