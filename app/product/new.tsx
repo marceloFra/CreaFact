@@ -7,6 +7,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Camera } from 'expo-camera';
 
 
+import { CameraView, useCameraPermissions } from 'expo-camera';
+
 import { NameAutocomplete } from '@/components/NameAutocomplete';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -32,6 +34,7 @@ export default function NewProduct() {
   const [image, setImage] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [scanning, setScanning] = useState(false);
+  const [, requestPermission] = useCameraPermissions();
   const affectations = [
     { code: '10', label: 'Gravado – Operación Onerosa' },
     { code: '11', label: 'Gravado – Retiro por premio' },
@@ -76,9 +79,8 @@ export default function NewProduct() {
   };
 
   const openScanner = async () => {
-    const { status } = await Camera.requestCameraPermissionsAsync();
-
-    if (status === 'granted') {
+    const { granted } = await requestPermission();
+    if (granted) {
       setScanning(true);
     } else {
       Alert.alert('Permiso de cámara', 'Se requiere permiso para escanear códigos de barras');
@@ -326,9 +328,9 @@ export default function NewProduct() {
         presentationStyle="fullScreen"
         onRequestClose={() => setScanning(false)}
       >
-        <Camera
+        <CameraView
+          onBarcodeScanned={handleBarCodeScanned}
 
-          onBarCodeScanned={handleBarCodeScanned}
           style={{ flex: 1 }}
         />
         <View style={{ position: 'absolute', top: 40, right: 20 }}>
