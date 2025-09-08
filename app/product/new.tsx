@@ -3,6 +3,7 @@ import { Picker } from '@react-native-picker/picker';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Alert, KeyboardAvoidingView, Modal, Platform, ScrollView, Switch, TextInput, TouchableOpacity, View } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Camera } from 'expo-camera';
 
@@ -84,6 +85,23 @@ export default function NewProduct() {
       setScanning(true);
     } else {
       Alert.alert('Permiso de cámara', 'Se requiere permiso para escanear códigos de barras');
+    }
+  };
+
+  const pickImage = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Permiso requerido', 'Se requiere permiso para acceder a la galería');
+      return;
+    }
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1,
+    });
+    if (!result.canceled && result.assets.length > 0) {
+      const asset = result.assets[0];
+      const name = asset.fileName || asset.uri.split('/').pop();
+      setImage(name || null);
     }
   };
 
@@ -298,10 +316,7 @@ export default function NewProduct() {
         <View>
           <ThemedText>Cargar imagen</ThemedText>
           <TouchableOpacity
-            onPress={() => {
-              setImage('imagen.png');
-              Alert.alert('Seleccionar imagen no implementado');
-            }}
+            onPress={pickImage}
             style={[
               inputStyle,
               { justifyContent: 'center', alignItems: 'center', paddingVertical: 12, borderStyle: 'dashed' },
